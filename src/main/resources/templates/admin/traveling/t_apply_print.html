@@ -1,0 +1,81 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/admin/base/print-form.css}" type="text/css"  rel="stylesheet" />
+    <link th:href="@{/css/admin/base/table.css}" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<button id="back" class="button">返回</button>
+<div class="lg-block-title1"  th:text="南京江宁公共交通集团有限公司出差申请单"></div>
+<form id="t_apply_print_form" enctype="multipart/form-data">
+    <div id="id" th:text="${travelingVo.id}"  style="display:none;"></div>
+    <div id="t-print-body" class="t-print-body">
+        <div class="print-content-name">
+            <div class="print-content-title">姓名:</div>
+            <div class="print-content-name-xx" th:text="${travelingVo.name}"></div>
+        </div>
+        <div class="print-content-sex">
+            <div class="print-content-title">性别:</div>
+            <div class="print-content-sex-xx" th:text="${travelingVo.sex}"></div>
+        </div>
+        <div class="print-content-birth">
+            <div class="print-content-title">出生年月:</div>
+            <div class="print-content-birth-xx" th:text="${travelingVo.birth}"></div>
+        </div>
+        <div class="print-content-staffId">
+            <div class="print-content-title">职号:</div>
+            <div class="print-content-staffId-xx" th:text="${travelingVo.staffId}"></div>
+        </div>
+        <div class="print-content-position">
+            <div class="print-content-title">岗位:</div>
+            <div class="print-content-position-xx" th:text="${travelingVo.position}"></div>
+        </div>
+        <div class="print-content-workUnit">
+            <div class="print-content-title">工作单位:</div>
+            <div class="print-content-workUnit-xx" th:text="${travelingVo.workUnit}"></div>
+        </div>
+        <div class="print-content-travelingTime">
+            <div class="print-content-title">外出时间:</div>
+            <div class="print-content-travelingTime-xx" th:text="${travelingVo.travelingTime}"></div>
+        </div>
+        <div class="print-content-reasonNumber">
+            <div class="print-content-title">外出事由及人数:</div>
+            <div class="print-content-reasonNumber-xx" th:text="${travelingVo.reasonNumber}"></div>
+        </div>
+
+        <th:block th:if='${not #lists.isEmpty(travelingVo.lcrzList)}'>
+            <div class="print-content-shInfo"  th:each="lcrz : ${travelingVo.lcrzList}">
+                <th:block>
+                    <div class="print-content-shxx">
+                        <div class="print-content-title" th:text="${lcrz.lcjd} + ':'"></div>
+                        <div class="print-content-shxx-xx" th:text="${lcrz.user.fullName}"></div>
+                    </div>
+                    <div class="print-content-spyj">
+                        <div class="print-content-title">意见:</div>
+                        <div class="print-content-spyj-xx" th:text="${lcrz.message}"></div>
+                    </div>
+                </th:block>
+            </div>
+        </th:block>
+
+        <!--<div class="print-content-dyrq">-->
+            <!--<span class="print-content-dyrq-title">打印日期:</span>-->
+            <!--<input name="dyrq" class="form-content date-picker" type="text" id="dyrq" />-->
+        <!--</div>-->
+        <!--<div class="print-content-dyz">-->
+            <!--<div class="print-content-title">打印人:</div>-->
+            <!--<div class="print-content-dyz-xx" th:text="${travelingVo.userName}"></div>-->
+        <!--</div>-->
+    </div>
+</form>
+<div class="box-print">
+    <button id="print" class="print-form button"  >打印</button>
+</div>
+<script th:src="@{/plugins/jquery-validation/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/jquery-validation/js/additional-methods.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/traveling/t_apply_print.js}" type="text/javascript"></script>
+</body>
+</html>

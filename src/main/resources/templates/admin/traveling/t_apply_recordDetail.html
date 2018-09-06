@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/admin/base/table.css}" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<div class="lg-block" >
+    <div class="lg-block-content">
+        <form id="t_apply_form" enctype="multipart/form-data">
+            <div class="lg-block-title1">江宁公共交通集团有限公司<input name="sbd" class="form-content" type="text" th:value = "${travelingVo.sbd}"/>出差审办单</div>
+            <!--<ul>-->
+                <!--<li>-->
+                    <!--<div class="form-title" style="display:inline;width: 130px">姓名：-->
+                        <!--<input name="name" class="form-content " type="text" style="width:60%" th:value = "${travelingVo.name}"/>-->
+                    <!--</div>-->
+                    <!--<div class="form-title" style="display:inline;width: 130px">性别：-->
+                        <!--<input id="xb" th:value="${travelingVo.sex}" type="hidden"/>-->
+                        <!--<select id="sex" name="sex" style="width:60%" class="form-content drop-down changeStyle">-->
+                            <!--<option value="男">男</option>-->
+                            <!--<option value="女">女</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                    <!--<div class="form-title" style="display:inline;width: 180px">出生年月：-->
+                        <!--<input name="birth" class="form-content" type="text" style="width:50%" th:value = "${travelingVo.birth}"/>-->
+                    <!--</div>-->
+                    <!--<div class="form-title" style="display:inline;width: 130px">职号：-->
+                        <!--<input name="staffId" class="form-content" type="text" style="width:60%" th:value = "${travelingVo.staffId}"/>-->
+                    <!--</div>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div class="form-title" style="width: 130px">岗位：-->
+                        <!--<input name="position" class="form-content" type="text" style="width:60%" th:value = "${travelingVo.position}"/>-->
+                    <!--</div>-->
+                    <!--<div class="form-title" style="width: 440px">工作单位：-->
+                        <!--<input name="workUnit" class="form-content" type="text" style="width:82%" th:value = "${travelingVo.workUnit}"/>-->
+                    <!--</div>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div class="form-title" style="display:inline;width: 570px">外出时间：-->
+                        <!--<input id="dateFrom" name="dateFrom" class="form-content" type="text"  style="width: 30%" th:value = "${travelingVo.dateFrom}"/> - -->
+                        <!--<input id="dateTo" name="dateTo" class="form-content" type="text"  style="width: 30%" th:value = "${travelingVo.dateTo}"/>-->
+                    <!--</div>-->
+                <!--</li>-->
+                <!--<li>-->
+                    <!--<div class="form-title" style="display:inline;width: 570px">外出事由及人数：</div>-->
+                    <!--<textarea name="reasonNumber" class="form-content text-content" style="width: 88%" th:text = "${travelingVo.reasonNumber}"/>-->
+                <!--</li>-->
+                <!--<input type="hidden" id="id" name="id" th:value="${travelingVo.id}" />-->
+            <!--</ul>-->
+            <ul>
+                <li>
+                    <div class="form-title" style="display:inline;width: 50%">姓名：
+                        <input name="name" class="form-content" type="text" style="width:25%;margin-left: 27px" th:value = "${travelingVo.name}"/>
+                    </div>
+                    <div class="form-title" style="display:inline;width: 50%">性别：
+                        <input id="xb" th:value="${travelingVo.sex}" type="hidden"/>
+                        <select id="sex" name="sex" style="width:25%" class="form-content drop-down changeStyle">
+                            <option value="男">男</option>
+                            <option value="女">女</option>
+                        </select>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-title" style="width: 50%">出生年月：
+                        <input name="birth" class="form-content" type="text" style="width:30%" th:value = "${travelingVo.birth}"/>
+                    </div>
+                    <div class="form-title" style="display:inline;width: 50%">职号：
+                        <input name="staffId" class="form-content" type="text" style="width:30%" th:value = "${travelingVo.staffId}"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-title" style="width: 50%">外出时间：
+                        <input id="dateFrom" name="dateFrom" class="form-content" type="text"  style="width: 30%" th:value = "${travelingVo.dateFrom}"/> -
+                        <input id="dateTo" name="dateTo" class="form-content" type="text"  style="width: 30%" th:value = "${travelingVo.dateTo}"/>
+                    </div>
+                    <div class="form-title" style="display:inline;width: 50%">岗位：
+                        <input name="position" class="form-content" type="text" style="width:30%" th:value = "${travelingVo.position}"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-title" style="width: 100%">工作单位：
+                        <input name="workUnit" class="form-content" type="text" style="width:60%" th:value = "${travelingVo.workUnit}"/>
+                    </div>
+                </li>
+                <li>
+                    <div class="form-title" style="display:inline;width: 570px">外出事由及人数：</div>
+                    <textarea name="reasonNumber" class="form-content text-content" style="width: 75%" th:text = "${travelingVo.reasonNumber}"/>
+                </li>
+                <input type="hidden" id="id" name="id" th:value="${travelingVo.id}" />
+            </ul>
+        </form>
+
+        <button id="uploadFile" style="margin-left:23%" class="button-active">上传附件</button>
+
+        <th:block th:if='${not #lists.isEmpty(travelingVo.attachmentList)}'>
+            <ul id="fjlb"  th:each="attach : ${travelingVo.attachmentList}">
+                <th:block>
+                    <li th:id="${attach.id}" th:text="${attach.name}"></li>
+                </th:block>
+            </ul>
+        </th:block>
+
+        <div id="upload-modal" class="modal modal-fixed-footer">
+            <div class="modal-header">
+                <h4 class="modal-title">上传附件</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form" id="fileUploadForm">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="files-template-wrapper"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal"
+                        class="btn btn-outline dark">关闭</button>
+            </div>
+        </div>
+        <ul>
+            <li id="saveCon" class="right">
+                <button id="bc" class="button hover">保存</button>
+                <button id="tj" class="button">提交</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+<script th:src="@{/plugins/jquery-validation/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/jquery-validation/js/additional-methods.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/components/components-date-time-pickers.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/traveling/t_applyRecordDetail.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/base/process_issues.js}" type="text/javascript"></script>
+</body>
+</html>

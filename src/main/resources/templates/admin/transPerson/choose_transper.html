@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link th:href="@{/css/admin/base/table.css}" rel="stylesheet"  type="text/css"/>
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+    <style>
+        .labelitem{margin-bottom: 10px}
+        ::-webkit-scrollbar {
+            width: 6px;
+        }/* 滚动条整体宽度 */
+        ::-webkit-scrollbar-track{
+            background-color: #F3F3F4;
+        }/* 滚动条的滑轨背景颜色 */
+        ::-webkit-scrollbar-thumb{
+            background-color: #DAE4E5;
+            border-radius: 3px;
+        }/* 滚动条的滑块背景颜色 */
+        ::-webkit-scrollbar-corner {
+            background-color: #B0AFB0;
+        } /* 横向滚动条和纵向滚动条相交处尖角的颜色 */
+    </style>
+</head>
+<body>
+<div class="portlet-body">
+<div id="chostrans">
+    <el-card v-for="(item,index) in forms" shadow="hover" style="width: 45%;float: left;margin-left: 2%;margin-bottom: 2%;height: 200px">
+        <p>流程名称：{{item.name}}</p>
+        <div style="overflow: auto">流程描述：{{item.description}}</div>
+        <el-button style="margin-left: 80%;margin-top: 30px" type="text"  v-on:click="chooseWf_hock(item.id)">选择此流程</el-button>
+    </el-card>
+</div>
+</div>
+
+
+<script th:src="@{/js/admin/transPerson/choose_transper.js}" type="text/javascript"></script>
+</body>
+</html>

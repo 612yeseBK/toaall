@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link th:href="@{/css/admin/base/table.css}" rel="stylesheet"  type="text/css"/>
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+    <style>
+        .labelitem{margin-bottom: 10px}
+        ::-webkit-scrollbar {
+            width: 6px;
+        }/* 滚动条整体宽度 */
+        ::-webkit-scrollbar-track{
+            background-color: #F3F3F4;
+        }/* 滚动条的滑轨背景颜色 */
+        ::-webkit-scrollbar-thumb{
+            background-color: #DAE4E5;
+            border-radius: 3px;
+        }/* 滚动条的滑块背景颜色 */
+        ::-webkit-scrollbar-corner {
+            background-color: #B0AFB0;
+        } /* 横向滚动条和纵向滚动条相交处尖角的颜色 */
+    </style>
+</head>
+<body>
+
+<div class="lg-block">
+    <div class="lg-block-content">
+        <form id="t_apply_form" enctype="multipart/form-data">
+            <div class="lg-block-title1">南京江宁公共交通集团有限公司人员借用申请单</div>
+            <ul>
+                <li>
+                    <div class="form-title">职工工号:</div>
+                    <input name="staffNum" class="form-content" type="text" th:value="${tpDetail.staffNum}"  style="width:380px;" />
+                </li>
+                <li>
+                    <div class="form-title">派往单位:</div>
+                    <input name="toDepartment" class="form-content" th:value="${tpDetail.toDepartment}"  type="text" style="width:380px;" />
+                </li>
+                <li>
+                    <div class="form-title">借用工种:</div>
+                    <input name="jobKind" class="form-content" th:value="${tpDetail.job}"  type="text" style="width:380px;" />
+                </li>
+                <li>
+                    <div class="form-title">借用时间:</div>
+                    <input name="startDate" class="form-content date-picker" th:value="${tpDetail.beginTime}"  type="text" />
+                    <span>至</span>
+                    <input name="endDate" class="form-content date-picker" th:value="${tpDetail.endTime}"  type="text" />
+                </li>
+                <li>
+                    <div class="form-title">借用人数:</div>
+                    <input name="number" class="form-content" th:value="${tpDetail.number}"  type="text" style="width:380px;" />
+                </li>
+                <li>
+                    <div class="form-title">借用原因:</div>
+                    <textarea name="reason" th:text="${tpDetail.reason}"  class="form-content text-content"></textarea>
+                </li>
+                <input type="hidden" name="id" th:value="${tpDetail.id}" />
+            </ul>
+        </form>
+
+        <button id="uploadFile" style="margin-left:23%" class="button-active">上传附件</button>
+        <th:block th:if='${not #lists.isEmpty(tpDetail.attachmentVos)}'>
+            <ul id="fjlb"  th:each="attach : ${tpDetail.attachmentVos}">
+                <th:block>
+                    <li th:id="${attach.id}" th:text="${attach.name}"></li>
+                </th:block>
+            </ul>
+        </th:block>
+
+
+
+        <div id="upload-modal" class="modal modal-fixed-footer">
+            <div class="modal-header">
+                <h4 class="modal-title">上传附件</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form" id="fileUploadForm">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="files-template-wrapper"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal"
+                        class="btn btn-outline dark">关闭</button>
+            </div>
+        </div>
+        <ul>
+            <li id="saveCon" class="right">
+                <!--<button id="bc" class="button hover">保存</button>-->
+                <button id="tj" class="button hover">提交</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+<!--<div class="lg-block">-->
+    <!--<div class="lg-block-content">-->
+    <!--<div id="chostrans">-->
+        <!--<el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" style="margin-left: 20%">-->
+            <!--<p style="font-size: 30px;margin-left:100px ;margin-bottom: 10px">江宁公交集团借用审批表</p>-->
+            <!--<div style=";border-bottom:1px solid rgb(0, 120, 58);margin-left: -10%;width: 80%;margin-bottom: 20px"></div>-->
+            <!--<el-form-item label="职工工号:  " prop="staffNum">-->
+                <!--<el-input v-model="ruleForm.staffNum" style="width:200px;margin-left:0px " ></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="派往单位:  " prop="toDepartment">-->
+                <!--<el-input v-model="ruleForm.toDepartment" style="width: 200px;margin-left:0px " ></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="借用工种:  " prop="jobKind">-->
+                <!--<el-input v-model="ruleForm.jobKind" style="width: 250px;margin-left:0px " ></el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="借用时间:  " v-bind:required="true">-->
+                    <!--<el-form-item prop="date" style="margin-left:0px ">-->
+                        <!--<el-date-picker-->
+                                <!--v-model="ruleForm.date"-->
+                                <!--type="daterange"-->
+                                <!--range-separator="-"-->
+                                <!--start-placeholder="开始日期"-->
+                                <!--end-placeholder="结束日期"-->
+                                <!--value-format="yyyyMMdd">-->
+                        <!--</el-date-picker>-->
+                    <!--</el-form-item>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="借用人数:  " prop="number">-->
+                <!--<el-input-number v-model="ruleForm.number" controls-position="right"  :min="1" style="margin-left:0px "></el-input-number>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item label="借用原因:  " prop="reason">-->
+                <!--<el-input type="textarea"-->
+                          <!--:rows="6" v-model="ruleForm.reason" style="width: 400px;margin-left:0px " ></el-input>-->
+            <!--</el-form-item>-->
+            <!--<div style="margin-left:-10%">-->
+            <!--<el-button id="uploadFile"  class="button-active" v-on:click="upload_hock">上传附件</el-button>-->
+            <!--<ul id="fjlb">-->
+            <!--</ul>-->
+            <!--</div>-->
+            <!--<el-form-item style="margin-left: 30%">-->
+                <!--<el-button type="primary" v-on:click="submitForm_hock">提 交</el-button>-->
+                <!--<el-button v-on:click="resetForm_hock">重 置</el-button>-->
+            <!--</el-form-item>-->
+        <!--</el-form>-->
+
+
+        <!--<div id="upload-modal" class="modal modal-fixed-footer">-->
+            <!--<div class="modal-header">-->
+                <!--<h4 class="modal-title">上传附件</h4>-->
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12">-->
+                        <!--<form class="form" id="fileUploadForm">-->
+                            <!--<div class="row" style="margin-top: 10px;">-->
+                                <!--<div class="col-md-10 col-md-offset-1">-->
+                                    <!--<div class="files-template-wrapper"></div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" data-dismiss="modal"-->
+                        <!--class="btn btn-outline dark">关闭</button>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+    <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<script th:src="@{/plugins/jquery-validation/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/jquery-validation/js/additional-methods.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/ajaxfileupload.js}" type="text/javascript"></script>
+<script th:src="@{/js/base/file.tool.js}" type="text/javascript"></script>
+<script th:src="@{/js/base/jquery.file.upload.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/transPerson/transper_form_detail.js}" type="text/javascript"></script>
+</body>
+</html>

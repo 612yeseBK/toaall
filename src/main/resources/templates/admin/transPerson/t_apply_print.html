@@ -1,0 +1,106 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/admin/base/t-print-form.css}" type="text/css"  rel="stylesheet" />
+    <link th:href="@{/css/admin/base/table.css}" type="text/css" rel="stylesheet" />
+    <style>
+        .labelitem{margin-bottom: 10px}
+        ::-webkit-scrollbar {
+            width: 6px;
+        }/* 滚动条整体宽度 */
+        ::-webkit-scrollbar-track{
+            background-color: #F3F3F4;
+        }/* 滚动条的滑轨背景颜色 */
+        ::-webkit-scrollbar-thumb{
+            background-color: #DAE4E5;
+            border-radius: 3px;
+        }/* 滚动条的滑块背景颜色 */
+        ::-webkit-scrollbar-corner {
+            background-color: #B0AFB0;
+        } /* 横向滚动条和纵向滚动条相交处尖角的颜色 */
+    </style>
+</head>
+<body>
+<button id="back" class="button">返回</button>
+<div class="lg-block-title1"  th:text="南京江宁公共交通集团有限公司借用单"></div>
+<form id="d_apply_print_form" enctype="multipart/form-data">
+    <div id="id" th:text="${transPrint.id}"  style="display:none;"></div>
+    <div class="print-body">
+        <div class="print-content-name">
+            <div class="print-content-title">姓名:</div>
+            <div class="print-content-name-xx" th:text="${transPrint.name}"></div>
+        </div>
+        <div class="print-content-bh">
+            <div class="print-content-title">性别:</div>
+            <div class="print-content-bh-xx" th:text="${transPrint.sex}"></div>
+            <!--<div class="print-content-bh-title">江宁公交</div>-->
+            <!--<input name="gwbh" class="form-content" type="text" id="gwbh"/>-->
+            <!--<div class="print-content-bh-title2">号</div>-->
+        </div>
+        <div class="print-content-birthday">
+            <div class="print-content-title">出生年月:<input name="birthday" class="form-content birthday date-picker" type="text" id="birthday"/></div>
+            <!--<div class="print-content-name-xx" th:text="${transPrint.name}"></div>-->
+        </div>
+        <div class="print-content-staffNum">
+            <div class="print-content-title">职工号:</div>
+            <div class="print-content-staffNum-xx" th:text="${transPrint.staffNum}"></div>
+        </div>
+        <div class="second-row">
+            <div class="print-content-bt">
+                <div class="print-content-title">岗位:</div>
+                <div class="print-content-bt-xx" th:text="${transPrint.userJob}"></div>
+            </div>
+            <div class="print-content-gzdw">
+                <div class="print-content-title">工作单位:</div>
+                <div class="print-content-gzdw-xx">江宁公交集团</div>
+            </div>
+        </div>
+
+
+        <!--<div class="print-content-ztc">-->
+            <!--<div class="print-content-title">借用时间:</div>-->
+            <!--<div class="print-content-ztc-xx" th:text="${transPrint.timePeriod}"></div>-->
+        <!--</div>-->
+        <div class="third-row">
+            <div class="print-content-jysj">
+                <div class="print-content-title">借用时间:</div>
+                <div class="print-content-jysj-xx" th:text="${transPrint.timePeriod}"></div>
+            </div>
+            <div class="print-content-dszsh">
+                <div class="print-content-dszsh-tilte">派往单位:</div>
+                <div class="print-content-sh-xx" th:text="${transPrint.toDepartment}"></div>
+            </div>
+            <div class="print-content-jobKind">
+                <div class="print-content-jobKind-title">工种:</div>
+                <div class="print-content-jobKind-xx" th:text="${transPrint.jobKind}"></div>
+            </div>
+        </div>
+        <div class="fourth-row">
+            <div class="print-content-reason">
+                <div class="print-content-title">借用事由:</div>
+                <div class="print-content-reason-xx" th:text="${transPrint.reason}"></div>
+            </div>
+            <div class="print-content-number">
+                <div class="print-content-number-tilte">借用人数:</div>
+                <div class="print-content-number-xx" th:text="${transPrint.number}"></div>
+            </div>
+        </div>
+        <div class="notify">
+            <div class="print-content-zs">
+                <div class="print-content-zs-tilte">审批过程：</div>
+                <div class="print-content-zs-xx" th:utext="${transPrint.records}"></div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="box-print">
+    <button id="print" class="print-form button"  >打印</button>
+</div>
+<script th:src="@{/plugins/jquery-validation/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/jquery-validation/js/additional-methods.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/admin/transPerson/t_apply_print.js}" type="text/javascript"></script>
+</body>
+</html>

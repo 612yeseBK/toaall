@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <link th:href="@{/css/admin/base/table.css}" rel="stylesheet"  type="text/css"/>
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+</head>
+<body>
+<div class="page-head">
+    <div class="page-title">
+        <h1>流程记录</h1>
+    </div>
+</div>
+<ul class="page-breadcrumb breadcrumb">
+    <li><a href="javascript:;">主页</a> <i class="fa fa-circle"></i></li>
+    <li><a href="javascript:;">系统管理</a> <i class="fa fa-circle"></i></li>
+    <li><span class="active">流程记录</span></li>
+</ul>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box">
+            <div class="portlet-body">
+                <table id="process-record-table" class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr class="table-title">
+                        <th>流程名称</th>
+                        <th>流程类别</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="process-record-tbody" class="mt-td-checkbox">
+                    <th:block th:if="${not #lists.isEmpty(lcbList)}">
+                        <tr th:each='lcb : ${lcbList}' th:id="${lcb.id}">
+                            <th:block >
+                                <td th:text='${lcb.lcName}'></td>
+                                <td th:text='${lcb.lclb}'></td>
+                                <td th:switch='${lcb.zt}'>
+                                    <div th:case="Y" style="color: green">使用</div>
+                                    <div th:case="N" style="color: red">停用</div>
+                                </td>
+                                <td><div onclick="seeLcb($(this.parentNode.parentNode).attr('id'))">查看</div>
+                                    <div th:if="${lcb.zt == 'Y'}" onclick="closeLcb($(this.parentNode.parentNode).attr('id'))">停用</div>
+                                    <div th:if="${lcb.zt == 'N'}" onclick="openLcb($(this.parentNode.parentNode).attr('id'))">启用</div>
+                                </td>
+                            </th:block>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/admin/system/processRecord/processRecord.js}" type="text/javascript"></script>
+</body>
+</html>

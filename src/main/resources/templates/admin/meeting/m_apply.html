@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>会议申请</title>
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+    <link th:href="@{/css/admin/base/form.css}" type="text/css" rel="stylesheet" />
+    <link th:href="@{/css/admin/base/table.css}" type="text/css" rel="stylesheet" />
+
+</head>
+<body>
+<div class="lg-block" >
+    <div class="lg-block-content">
+        <form id="m_apply_form" enctype="multipart/form-data">
+            <div class="lg-block-title1">江宁公共交通集团有限公司<input name="sqd" class="form-content" type="text" />会议申请表</div>
+            <ul>
+                <li>
+                    <div class="form-title">会议主题：</div>
+                    <input name="hyzt" class="form-content" type="text" style="width:375px" />
+                </li>
+                <li>
+                    <div class="form-title">会议内容：</div>
+                    <textarea id="hynr" name="hynr" class="form-content text-content" onKeyUp="keypress()" onblur="keypress()"> </textarea>
+                    <span > <label id="pinglun" color="gray" style="padding-left: 350px">(你还可以输入300个字)</label> </span>
+                </li>
+                <li>
+                    <div class="form-title">
+                        会议时间、地点：
+                    </div>
+                    <input id="ddsj" name="ddsj" type="text" style="width:300px" value="" readonly="readonly"/>
+                    <button id="xzsjdd" class="button" data-toggle="modal" data-target="#myModal" onclick="loadMeetingRoom()">选择</button>
+
+                </li>
+                <li>
+                    <div class="form-title">参会人员：</div>
+                    <textarea name="chry" class="form-content text-content"></textarea>
+                </li>
+                <li>
+                    <div class="form-title">会议对接人姓名：</div>
+                    <input name="djrxm" class="form-content" />
+                </li>
+                <li>
+                    <div class="form-title">联系方式：</div>
+                    <input name="lxfs" class="form-content" />
+                </li>
+                <li>
+                    <div class="form-title">会议规格：</div>
+                    <lable><input name="hygg" type="checkbox" value="1"/>瓷杯茶水</lable>
+                    <lable><input name="hygg" type="checkbox" value="2"/>纸杯茶水</lable>
+                    <lable><input name="hygg" type="checkbox" value="3"/>水果</lable>
+                    <lable><input name="hygg" type="checkbox" value="4"/>席卡</lable>
+                </li>
+                <li>
+                    <div class="form-title">其他：</div>
+                    <textarea name="qt" class="form-content text-content" />
+                </li>
+            </ul>
+        </form>
+
+        <button id="uploadFile" style="margin-left:23%" class="button-active">上传附件</button>
+        <ul id="fjlb"></ul>
+        <div id="upload-modal" class="modal modal-fixed-footer">
+            <div class="modal-header">
+                <h4 class="modal-title">上传附件</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form" id="fileUploadForm">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="files-template-wrapper"></div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal"
+                        class="btn btn-outline dark">关闭</button>
+            </div>
+        </div>
+        <ul>
+            <li id="saveCon" class="right">
+                <button id="bc" class="button hover">保存</button>
+                <button id="tj" class="button hover">提交</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" >
+    <!--<div class="modal-dialog" style="width:100%;height:100%">-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">
+                    选择会议时间地点
+                </h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="form_data">
+                    <div style="display:inline;margin-right:30px">地点：
+                        <select id="hydd" name="hydd" style="width:20%" class="form-content drop-down changeStyle">
+                        </select>
+                    </div>
+                    <div style="display:inline;margin-left:30px">会议室：
+                        <select id="hys" name="hys" style="width:30%" class="form-content drop-down changeStyle">
+                            <option value="" selected="true" disabled="true">请选择</option>
+                        </select>
+                    </div>
+                    <div style="margin-top:5px">
+                        <div style="display:inline">选择日期：
+                            <input id='hyrq' name="hyrq" type="text"  class="form-content date-picker changeStyle" readonly="readonly"/>
+                        </div>
+
+                        <div class="ck" style="display:inline">
+                            <button id="ck" type="button" onclick="searchSyqk()">查看</button>
+                        </div>
+                    </div>
+                    <div class="syxq" style="margin-top:10px">会议室使用详情：
+                        <div id="container" style="min-width:400px;height:150px;"></div>
+                    </div>
+
+                    <div>
+                        会议时间：
+                        <input id="kssj" name="kssj" class="form-content time changeStyle" type="text" value="" style="margin-top: 10px; width: 100px" readonly="readonly"/> -
+                        <input id="jssj" name="jssj" class="form-content time changeStyle" type="text" value="" style="margin-top: 10px; width: 100px" readonly="readonly"/>
+                        <span id="error" style="color: red;display: none">（时间段信息冲突）</span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"  class="btn btn-primary"  data-dismiss="modal" id="btnClose">
+                    关闭
+                </button>
+                <button type="button" class="btn btn-primary"  id="btnSave">
+                    保存
+                </button>
+            </div>
+
+        </div><!-- /.modal-content -->
+    <!--</div>&lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+</div><!-- /.modal -->
+
+
+<!--<script th:src="@{/plugins/jquery.min.js}" type="text/javascript"></script>-->
+<script th:src="@{/plugins/jquery-validation/js/jquery.validate.min.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/jquery-validation/js/additional-methods.js}" type="text/javascript"></script>
+<!--<script th:src="@{/plugins/highcharts.js}" type="text/javascript"></script>-->
+<script src="http://code.highcharts.com/highcharts.js" type = "text/javascript"></script>
+<!--<script type = "text/javascript">-->
+    <!--if (!$.fn.highcharts) {-->
+        <!--src="http://code.highcharts.com/highcharts.js";-->
+    <!--}-->
+<!--</script>-->
+<script th:src="@{/js/admin/meeting/m_apply.js}" type="text/javascript"></script>
+<script th:src="@{/plugins/ajaxfileupload.js}" type="text/javascript"></script>
+<script th:src="@{/js/base/file.tool.js}" type="text/javascript"></script>
+<script th:src="@{/js/base/jquery.file.upload.js}" type="text/javascript"></script>
+
+
+</body>
+</html>
