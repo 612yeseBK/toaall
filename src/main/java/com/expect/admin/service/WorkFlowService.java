@@ -151,6 +151,7 @@ public class WorkFlowService {
      * 获取所有的流程简略信息
      * @return
      */
+    @Transactional
     public List<WfInfo> getAllWfInfo() throws NoKindWorkFlowException{
         List<WorkFlow> workFlows = findAll();
         List<WfInfo> wfInfos = new ArrayList<>();
@@ -172,6 +173,7 @@ public class WorkFlowService {
      * @param id
      * @return
      */
+    @Transactional
     public WfDetail getWfInfoById(String id){
         WfDetail wfDetail = new WfDetail();
         WorkFlow workFlow = findOne(id);
@@ -210,17 +212,15 @@ public class WorkFlowService {
 
 
 
-    @Transactional
+
     public WorkFlow findOne(String id){
         return workFlowRepository.findOne(id);
     }
 
-    @Transactional
     public List<WorkFlow> findAll(){
         return workFlowRepository.findAll();
     }
 
-    @Transactional
     public WorkFlow save(WorkFlow workFlow){
         return workFlowRepository.save(workFlow);
     }
@@ -256,6 +256,12 @@ public class WorkFlowService {
     }
 
 
+    /**
+     * 用于判断某个流程能否删除
+     * @param workFlow
+     * @return
+     * @throws NoKindWorkFlowException
+     */
     public boolean canDelete(WorkFlow workFlow) throws NoKindWorkFlowException{
         String temp_type = workFlow.getType();
         String real_type;
@@ -278,22 +284,22 @@ public class WorkFlowService {
 
 
 
-    /**
-     * 真正意义上删除流程
-     * 流程必须要是那种没有人使用过的
-     * 先删除节点的人员和角色，然后删除节点
-     * @param id
-     */
-    public boolean realDelete (String id) throws NoKindWorkFlowException {
-        WorkFlow workFlow = workFlowRepository.findOne(id);
-        // 如果可以删则删除
-        if (canDelete(workFlow)){
-            return UnchekrealDelete(workFlow);
-        } else{
-            // 不可以删除返回false
-            return false;
-        }
-    }
+//    /**
+//     * 真正意义上删除流程
+//     * 流程必须要是那种没有人使用过的
+//     * 先删除节点的人员和角色，然后删除节点
+//     * @param id
+//     */
+//    public boolean realDelete (String id) throws NoKindWorkFlowException {
+//        WorkFlow workFlow = workFlowRepository.findOne(id);
+//        // 如果可以删则删除
+//        if (canDelete(workFlow)){
+//            return UnchekrealDelete(workFlow);
+//        } else{
+//            // 不可以删除返回false
+//            return false;
+//        }
+//    }
 
     /**
      * 这是不加以审查检验的删除方法
@@ -306,6 +312,13 @@ public class WorkFlowService {
         return UnchekrealDelete(workFlow);
     }
 
+    /**
+     * 这里删除的是那些没有被使用过的流程，不加审查了
+     * @param workFlow
+     * @return
+     * @throws NoKindWorkFlowException
+     */
+    @Transactional
     public boolean UnchekrealDelete (WorkFlow workFlow) throws NoKindWorkFlowException {
         WFPoint wfPoint = workFlow.getBeginPoint();
         while (!wfPoint.getName().equals(WFPoint.ENDPOINT)){

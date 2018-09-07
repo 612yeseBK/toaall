@@ -60,6 +60,7 @@ public class TransferPersonnelService {
         return tpRepository.findById(id);
     }
 
+    @Transactional
     public TransperDetail getDetailFromTp(TransferPersonnel tp){
         TransperDetail tpDetail = new TransperDetail();
         tpDetail.setApplyTime(tp.getApplyTime());
@@ -131,6 +132,7 @@ public class TransferPersonnelService {
      * 提交已经保存的
 
      */
+    @Transactional
     public void commitSaved(String id){
         TransferPersonnel tp = tpRepository.findOne(id);
         WFPoint beginPoint = tp.getWorkFlow().getBeginPoint();
@@ -144,6 +146,7 @@ public class TransferPersonnelService {
      * 删除未提交的
      * @param id
      */
+    @Transactional
     public void deleteWtj(String id){
         TransferPersonnel transferPersonnel = tpRepository.findOne(id);
         Set<TransPerRecord> transPerRecords = transferPersonnel.getTransPerRecords();
@@ -196,6 +199,7 @@ public class TransferPersonnelService {
      * @param state
      * @return
      */
+    @Transactional
     public List<TransAplyRecds> getApplyRecs(User user,String state){
         String[] states;
         if (StringUtil.isEmpty(state)) {
@@ -231,6 +235,7 @@ public class TransferPersonnelService {
      * @param user
      * @return
      */
+    @Transactional
     public List<TransferPersonnelVo> getCheckForms(User user){
         List<TransferPersonnel> tfps = tpRepository.findAll();
         List<TransferPersonnel> tfpsNeed = new ArrayList<>();
@@ -254,6 +259,7 @@ public class TransferPersonnelService {
      * @param user
      * @return
      */
+    @Transactional
     public List<TransferPersonnelVo> getCheckedForms(User user){
         List<TransPerRecord> tprs = tprRepository.findAll();
         List<TransferPersonnel> tps = new ArrayList<>();
@@ -318,6 +324,7 @@ public class TransferPersonnelService {
      * @param message
      * @param cljg
      */
+    @Transactional
     public void checkApply(String id,String message,String cljg){
         TransferPersonnel tp = tpRepository.findOne(id);
         WFPoint wfp = tp.getNxtPoint(); //当前流程
