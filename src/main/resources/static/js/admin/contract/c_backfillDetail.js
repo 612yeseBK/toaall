@@ -25,6 +25,7 @@ $().ready(function () {
                     alert(data.message);
                     if(data.success) {
                         toBhht();
+                        refreshBackfill();
                     }
                 }
             )
@@ -49,6 +50,23 @@ $().ready(function () {
             },100);
         });
     });
+
+    function refreshBackfill(){
+        var n = $('#编号回填').text();
+        n--;
+        if(n == 0){
+            $('#编号回填').remove();
+        }else{
+            $('#编号回填').text(n);
+        }
+        var count = $('#合同审办').text();
+        count--;
+        if (count == 0){
+            $('#合同审办').remove();
+        }else{
+            $('#合同审办').text(count);
+        }
+    }
 
     //附件查看
     var n = 1;

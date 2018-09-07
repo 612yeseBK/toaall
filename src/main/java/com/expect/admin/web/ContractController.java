@@ -192,7 +192,7 @@ public class ContractController {
 		UserVo userVo = userService.getLoginUser();
 		if(StringUtil.isBlank(lx)) lx = "dsp";
 		ModelAndView modelAndView = new ModelAndView(viewName + "c_approve");
-		List<RoleJdgxbGxbVo> condition = roleJdgxbGxbService.getWjzt("sp", "ht");
+		List<RoleJdgxbGxbVo> condition = roleJdgxbGxbService.getCondition( "ht");
 		if(condition == null) return modelAndView;
 		List<ContractVo> contractVos = new ArrayList<>();
 		String roleName ="";

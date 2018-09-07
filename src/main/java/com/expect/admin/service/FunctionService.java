@@ -47,6 +47,8 @@ public class FunctionService {
 	private FwtzService fwtzService;
 	@Autowired
 	private DraftSwService draftSwService;
+	@Autowired
+	private TravelingService travelingService;
 
 	/**
 	 * 根据用户封装导航菜单
@@ -150,138 +152,227 @@ public class FunctionService {
 
 		//增加待处理条目
 		UserVo userVo = userService.getUserById(user.getId());
-		String department = userVo.getDepartmentName();
-		String userName = userVo.getUsername();
 		for(int i = 0; i < resultFunctions.size(); i++){
 			FunctionVo parentFunction = resultFunctions.get(i);
 			if(parentFunction.getName().equals("会议管理")){
-				int countParent = 0;
-				List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
-				if(childFunctions != null){
-					for(int j = 0; j < childFunctions.size(); j++){
-
-						FunctionVo childFunction = childFunctions.get(j);
-						String functionName = childFunction.getName();
-						if(functionName.equals("会议审批")){
-							if (department.indexOf("集团") != -1){
-								int countChild = meetingRepository.findCountMeeting("2", "1");
-								countParent += countChild;
-								if(countChild != 0){
-									childFunction.setCount("" + countChild);
-								}
-							}else if (department.indexOf("东山公交") != -1) {
-								int countChild = meetingRepository.findCountMeeting("2", "2");
-								countParent += countChild;
-								if(countChild != 0){
-									childFunction.setCount("" + countChild);
-								}
-							}
-						}else if(functionName.equals("会议通知")){
-							int countChild = hytzRepository.findCountHytz(userName, "0");
-							countParent += countChild;
-							if(countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}
-					}
-				}
-				if(countParent != 0){
-					parentFunction.setCount("" + countParent);
-				}
+				parentFunction = getMeetingCount(parentFunction, userVo);
 			}else if (parentFunction.getName().equals("合同审办")){
-				int countParent = 0;
-				List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
-				if (childFunctions != null){
-					for (int j = 0; j < childFunctions.size(); j++){
-						FunctionVo childFunction = childFunctions.get(j);
-						String functionName = childFunction.getName();
-						if(functionName.equals("合同审批")){
-							List<RoleJdgxbGxbVo> condition = roleJdgxbGxbService.getWjzt("sp", "ht");
-							List<ContractVo> contractVoList = new ArrayList<>();
-							for (RoleJdgxbGxbVo roleJdgxbGxbVo:condition){
-								List<ContractVo> contractVos = contractService.getContractByUserIdAndCondition(userVo.getId(), roleJdgxbGxbVo.getJdId(), "dsp");
-								contractVoList.addAll(contractVos);
-							}
-							int countChild = contractVoList.size();
-							countParent += countChild;
-							if (countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}
-					}
-				}
-				if(countParent != 0){
-					parentFunction.setCount("" + countParent);
-				}
+				parentFunction = getContractCount(parentFunction, userVo);
 			}else if (parentFunction.getName().equals("发文管理")){
-				int countParent = 0;
-				List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
-				if (childFunctions != null){
-					for (int j = 0; j < childFunctions.size(); j++){
-						FunctionVo childFunction = childFunctions.get(j);
-						String functionName = childFunction.getName();
-						if (functionName.equals("发文审批")){
-							List<DocumentVo> documentVoList = documentService.getDocumentByUserIdAndCondition(userVo.getId(),"2", "dsp");
-							int countChild = documentVoList.size();
-							countParent += countChild;
-							if (countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}else if (functionName.equals("发文通知")){
-							String role = userVo.getRoleName();
-							List<FwtzVo> fwtzVoList=fwtzService.getFwtzByUserName(userName);
-							List<FwtzVo> wdFwtzVoList=fwtzService.getWdFwtzList(fwtzVoList);
-							List<DocumentVo> documentVoList1=fwtzService.getFwDocumentVo(wdFwtzVoList,role);
-							List<DocumentVo> documentVoList=fwtzService.getFwDocumentVoMerge(documentVoList1);
-							int countChild = documentVoList.size();
-							countParent += countChild;
-							if (countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}
-					}
-				}
-				if(countParent != 0){
-					parentFunction.setCount("" + countParent);
-				}
+				parentFunction = getDocumentCount(parentFunction, userVo);
 			}else if (parentFunction.getName().equals("收文管理")){
-				int countParent = 0;
-				List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
-				if (childFunctions != null){
-					for (int j = 0; j < childFunctions.size(); j++){
-						FunctionVo childFunction = childFunctions.get(j);
-						String functionName = childFunction.getName();
-						if (functionName.equals("收文批示")){
-							List<DraftSwVo> draftSwVoList = draftSwService.getDraftSwVoList("swps", "dps", userVo.getId());
-							int countChild = draftSwVoList.size();
-							countParent += countChild;
-							if (countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}else if (functionName.equals("收文传阅")){
-							List<DraftSwVo> draftSwVoList = draftSwService.getDraftSwVoList("swcy", "dcy", userVo.getId());
-							int countChild = draftSwVoList.size();
-							countParent += countChild;
-							if (countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}else if (functionName.equals("收文办理")){
-							List<DraftSwVo> draftSwVoList = draftSwService.getDraftSwVoList("swbl", "wbl", userVo.getId());
-							int countChild = draftSwVoList.size();
-							countParent += countChild;
-							if (countChild != 0){
-								childFunction.setCount("" + countChild);
-							}
-						}
-					}
-				}
-				if(countParent != 0){
-					parentFunction.setCount("" + countParent);
-				}
+				parentFunction = getDraftSwCount(parentFunction, userVo);
+			}else if (parentFunction.getName().equals("出差管理")){
+				parentFunction = getTravelingCount(parentFunction, userVo);
 			}
+			resultFunctions.set(i, parentFunction);
 		}
 
 		return resultFunctions;
+	}
+
+	/**
+	 * 获取会议模块功能的待处理的条目的数量
+	 * @param parentFunction
+	 * @param userVo
+	 * @return
+	 */
+	private FunctionVo getMeetingCount(FunctionVo parentFunction, UserVo userVo){
+		int countParent = 0;
+		List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
+		if(childFunctions != null){
+			for(int j = 0; j < childFunctions.size(); j++){
+				FunctionVo childFunction = childFunctions.get(j);
+				String functionName = childFunction.getName();
+				String department = userVo.getDepartmentName();
+				String userName = userVo.getUsername();
+				if(functionName.equals("会议审批")){
+					if (department.indexOf("集团") != -1){
+						int countChild = meetingRepository.findCountMeeting("2", "1");
+						countParent += countChild;
+						if(countChild != 0){
+							childFunction.setCount("" + countChild);
+						}
+					}else if (department.indexOf("东山公交") != -1) {
+						int countChild = meetingRepository.findCountMeeting("2", "2");
+						countParent += countChild;
+						if(countChild != 0){
+							childFunction.setCount("" + countChild);
+						}
+					}
+				}else if(functionName.equals("会议通知")){
+					int countChild = hytzRepository.findCountHytz(userName, "0");
+					countParent += countChild;
+					if(countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}
+			}
+		}
+		if(countParent != 0){
+			parentFunction.setCount("" + countParent);
+		}
+		return parentFunction;
+	}
+
+	/**
+	 * 获取合同模块功能的待处理的条目的数量
+	 * @param parentFunction
+	 * @param userVo
+	 * @return
+	 */
+	private FunctionVo getContractCount(FunctionVo parentFunction, UserVo userVo){
+		int countParent = 0;
+		List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
+		if (childFunctions != null){
+			for (int j = 0; j < childFunctions.size(); j++){
+				FunctionVo childFunction = childFunctions.get(j);
+				String functionName = childFunction.getName();
+				if(functionName.equals("合同审批")){
+					List<RoleJdgxbGxbVo> condition = roleJdgxbGxbService.getWjzt("sp", "ht");
+					List<ContractVo> contractVoList = new ArrayList<>();
+					for (RoleJdgxbGxbVo roleJdgxbGxbVo:condition){
+						List<ContractVo> contractVos = contractService.getContractByUserIdAndCondition(userVo.getId(), roleJdgxbGxbVo.getJdId(), "dsp");
+						contractVoList.addAll(contractVos);
+					}
+					int countChild = contractVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}else if (functionName.equals("编号回填")){
+					List<ContractVo> contractVoList = contractService.getContractByUserIdAndCondition(userVo.getId(), "Y","dht");
+					int countChild = contractVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}
+			}
+		}
+		if(countParent != 0){
+			parentFunction.setCount("" + countParent);
+		}
+		return parentFunction;
+	}
+
+	/**
+	 * 获取发文模块功能的待处理的条目的数量
+	 * @param parentFunction
+	 * @param userVo
+	 * @return
+	 */
+	private FunctionVo getDocumentCount(FunctionVo parentFunction, UserVo userVo){
+		int countParent = 0;
+		List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
+		if (childFunctions != null){
+			for (int j = 0; j < childFunctions.size(); j++){
+				FunctionVo childFunction = childFunctions.get(j);
+				String functionName = childFunction.getName();
+				if (functionName.equals("发文审批")){
+					List<DocumentVo> documentVoList = documentService.getDocumentByUserIdAndCondition(userVo.getId(),"2", "dsp");
+					int countChild = documentVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}else if (functionName.equals("发文通知")){
+					String role = userVo.getRoleName();
+					String userName = userVo.getUsername();
+					List<FwtzVo> fwtzVoList=fwtzService.getFwtzByUserName(userName);
+					List<FwtzVo> wdFwtzVoList=fwtzService.getWdFwtzList(fwtzVoList);
+					List<DocumentVo> documentVoList1=fwtzService.getFwDocumentVo(wdFwtzVoList,role);
+					List<DocumentVo> documentVoList=fwtzService.getFwDocumentVoMerge(documentVoList1);
+					int countChild = documentVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}
+			}
+		}
+		if(countParent != 0){
+			parentFunction.setCount("" + countParent);
+		}
+		return parentFunction;
+	}
+
+	/**
+	 * 获取收文模块功能的待处理的条目的数量
+	 * @param parentFunction
+	 * @param userVo
+	 * @return
+	 */
+	private FunctionVo getDraftSwCount(FunctionVo parentFunction, UserVo userVo){
+		int countParent = 0;
+		List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
+		if (childFunctions != null){
+			for (int j = 0; j < childFunctions.size(); j++){
+				FunctionVo childFunction = childFunctions.get(j);
+				String functionName = childFunction.getName();
+				if (functionName.equals("收文批示")){
+					List<DraftSwVo> draftSwVoList = draftSwService.getDraftSwVoList("swps", "dps", userVo.getId());
+					int countChild = draftSwVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}else if (functionName.equals("收文传阅")){
+					List<DraftSwVo> draftSwVoList = draftSwService.getDraftSwVoList("swcy", "dcy", userVo.getId());
+					int countChild = draftSwVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}else if (functionName.equals("收文办理")){
+					List<DraftSwVo> draftSwVoList = draftSwService.getDraftSwVoList("swbl", "wbl", userVo.getId());
+					int countChild = draftSwVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}
+			}
+		}
+		if(countParent != 0){
+			parentFunction.setCount("" + countParent);
+		}
+		return parentFunction;
+	}
+
+	/**
+	 * 获取出差模块功能的待处理的条目的数量
+	 * @param parentFunction
+	 * @param userVo
+	 * @return
+	 */
+	private FunctionVo getTravelingCount(FunctionVo parentFunction, UserVo userVo){
+		int countParent = 0;
+		List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
+		if (childFunctions != null){
+			for (int j = 0; j < childFunctions.size(); j++){
+				FunctionVo childFunction = childFunctions.get(j);
+				String functionName = childFunction.getName();
+				if(functionName.equals("出差审批")){
+					List<RoleJdgxbGxbVo> condition = roleJdgxbGxbService.getCondition("cc");
+					List<TravelingVo> travelingVoList = new ArrayList<>();
+					for (RoleJdgxbGxbVo roleJdgxbGxbVo:condition){
+						List<TravelingVo> travelingVos = travelingService.getTravelingByUserIdAndCondition(userVo.getId(),
+								roleJdgxbGxbVo.getJdId(), "dsp");
+						travelingVoList.addAll(travelingVos);
+					}
+					int countChild = travelingVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}
+			}
+		}
+		if(countParent != 0){
+			parentFunction.setCount("" + countParent);
+		}
+		return parentFunction;
 	}
 
 	/**

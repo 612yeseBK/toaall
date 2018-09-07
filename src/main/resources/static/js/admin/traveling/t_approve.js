@@ -94,19 +94,19 @@ function pass(id) {
 }
 
 function refreshTraveling(){
-    var n = $('#人事管理').text();
+    var n = $('#出差审批').text();
     n--;
     if(n == 0){
-        $('#人事管理').remove();
+        $('#出差审批').remove();
     }else{
-        $('#人事管理').text(n);
+        $('#出差审批').text(n);
     }
-    var count = $('#人事管理').text();
+    var count = $('#出差管理').text();
     count--;
     if (count == 0){
-        $('#人事管理').remove();
+        $('#出差管理').remove();
     }else{
-        $('#人事管理').text(count);
+        $('#出差管理').text(count);
     }
 }
 
