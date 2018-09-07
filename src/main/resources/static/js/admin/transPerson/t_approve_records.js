@@ -70,25 +70,25 @@ function pass(id) {
         var table = $('#d-approve-table').DataTable();
         if(data.success) {
             table.rows('#'+id).remove().draw();
-            // refreshDocument();
+            refreshTransPer();
         }
     });
 }
 
-function refreshDocument(){
-    var n = $('#发文审批').text();
+function refreshTransPer(){
+    var n = $('#借调审核').text();
     n--;
     if(n == 0){
-        $('#发文审批').remove();
+        $('#借调审核').remove();
     }else{
-        $('#发文审批').text(n);
+        $('#借调审核').text(n);
     }
-    var count = $('#发文管理').text();
+    var count = $('#人员借调').text();
     count--;
     if (count == 0){
-        $('#发文管理').remove();
+        $('#人员借调').remove();
     }else{
-        $('#发文管理').text(count);
+        $('#人员借调').text(count);
     }
 }
 

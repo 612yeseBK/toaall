@@ -28,7 +28,7 @@ $(document).ready(function () {
             AjaxTool.post('transper/commitCheck', $('#d_approveForm').serialize()+"&id="+$('#data').val(), function (data) {
                     alert(data.message);
                     toGwsp();
-                    refreshDocument();
+                refreshTransPer();
                 }
             )
         } else {

@@ -10,6 +10,7 @@ import javax.transaction.Transactional;
 
 import com.expect.admin.data.dao.HytzRepository;
 import com.expect.admin.data.dao.MeetingRepository;
+import com.expect.admin.data.dataobject.TransferPersonnel;
 import com.expect.admin.service.vo.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -49,6 +50,8 @@ public class FunctionService {
 	private DraftSwService draftSwService;
 	@Autowired
 	private TravelingService travelingService;
+	@Autowired
+	private TransferPersonnelService transPerService;
 
 	/**
 	 * 根据用户封装导航菜单
@@ -164,7 +167,9 @@ public class FunctionService {
 				parentFunction = getDraftSwCount(parentFunction, userVo);
 			}else if (parentFunction.getName().equals("出差管理")){
 				parentFunction = getTravelingCount(parentFunction, userVo);
-			}
+			}else if (parentFunction.getName().equals("人员借调")){
+			parentFunction = getTransPerCount(parentFunction, userVo);
+		}
 			resultFunctions.set(i, parentFunction);
 		}
 
@@ -362,6 +367,36 @@ public class FunctionService {
 						travelingVoList.addAll(travelingVos);
 					}
 					int countChild = travelingVoList.size();
+					countParent += countChild;
+					if (countChild != 0){
+						childFunction.setCount("" + countChild);
+					}
+				}
+			}
+		}
+		if(countParent != 0){
+			parentFunction.setCount("" + countParent);
+		}
+		return parentFunction;
+	}
+
+
+	/**
+	 * 获取人员借调模块功能的待处理的条目的数量
+	 * @param parentFunction
+	 * @param userVo
+	 * @return
+	 */
+	private FunctionVo getTransPerCount(FunctionVo parentFunction, UserVo userVo){
+		int countParent = 0;
+		List<FunctionVo> childFunctions = parentFunction.getChildFunctionVos();
+		if (childFunctions != null){
+			for (int j = 0; j < childFunctions.size(); j++){
+				FunctionVo childFunction = childFunctions.get(j);
+				String functionName = childFunction.getName();
+				if (functionName.equals("借调审核")){
+					List<TransferPersonnelVo> transferPersonnelVos = transPerService.getCheckForms(userService.getLogUsr());
+					int countChild = transferPersonnelVos.size();
 					countParent += countChild;
 					if (countChild != 0){
 						childFunction.setCount("" + countChild);
